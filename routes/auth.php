@@ -40,7 +40,6 @@ Route::middleware('guest')->group(function () {
     
 });
 
-Route::get('posts', [PostsController::class, 'post'])->name('posts');
 
 Route::middleware('auth')->group(function () {
     Route::get('verify-email', EmailVerificationPromptController::class)
