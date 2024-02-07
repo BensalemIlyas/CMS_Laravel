@@ -15,10 +15,27 @@ class PostsController extends Controller
         return view('post', compact('posts'));
     }
 
-    public function show($id)
-    {
-        $post = Post::findOrFail($id);
-        return view('posts.show', compact('post'));
+   
+
+    public function show($id){
+        try {
+            $post = Post::findOrFail($id);
+
+            // Retourner les détails du post au format JSON
+            return response()->json([
+                'image_path' => asset('storage/' . $post->image_path),
+                'title' => $post->title,
+                'content' => $post->content,
+                'published_at' => $post->published_at,
+                // Ajoutez d'autres champs au besoin
+            ]);
+        } catch (\Exception $e) {
+            // Log l'erreur pour le débogage
+            \Log::error('Erreur lors de la récupération des détails du post: ' . $e->getMessage());
+
+            // Renvoyer une réponse JSON avec un message d'erreur
+            return response()->json(['error' => 'Erreur interne du serveur.'], 500);
+        }
     }
 
     public function store(Request $request)
@@ -41,9 +58,6 @@ class PostsController extends Controller
         // Ajout de la date de publication aux données validées
         $validatedData['published_at'] = $request->input('published_at');
          
-        // Création du post avec les données validées
-        $post = Post::create($validatedData);
-
         // Redirection ou autre logique après la création du post
         return redirect()->route('posts')->with('success', 'Le post a été créé avec succès.');
     }

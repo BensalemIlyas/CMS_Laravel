@@ -93,12 +93,30 @@
         });
 
         function afficherPostComplet(postId) {
-            // Vous pouvez charger le contenu complet du post en fonction de l'ID
-            // Ici, nous affichons simplement un texte pour l'exemple
-            document.getElementById('postComplet').innerHTML = `<div class="border rounded-lg p-4">
-                                                                <h1 class="text-2xl font-semibold mb-4">PostComplet</h1>
-                                                                <p>Contenu complet du Post ${postId} ...</p>
-                                                                </div>`;
+            fetch(`/posts/${postId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erreur de réponse du serveur.');
+                    }
+                    return response.json();
+                })
+                .then(post => {
+                    // Construire le HTML pour afficher les détails du post complet
+                    const postDetailsHTML = `
+                        <div class="border rounded-lg p-4">
+                            <img src="${post.image_path}" alt="${post.title}" class="w-full h-64 object-cover mb-4 rounded">
+                            <h1 class="text-2xl font-semibold mb-2">${post.title}</h1>
+                            <p class="text-gray-600 mb-2">${post.content}</p>
+                            <p>Publié le ${post.published_at}</p>
+                        </div>`;
+
+                    // Afficher les détails du post dans la partie droite
+                    document.getElementById('postComplet').innerHTML = postDetailsHTML;
+                })
+                .catch(error => {
+                    console.error('Erreur lors de la récupération des détails du post :', error.message);
+                });
         }
+
     </script>
 @endsection

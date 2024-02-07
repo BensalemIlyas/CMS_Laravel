@@ -7,7 +7,8 @@
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}">
                         <!-- <x-application-logo class="block h-9 w-auto fill-current text-gray-800" /> -->
-                        <img src="CMS_Laravel/resources/views/layouts/img/1.jpg" alt = "logo" class="w-full h-auto">
+                        <img src="C:\xampp\htdocs\LARAVEL\CMS_Laravel\public\storage\images\menu\1.jpg" alt = "logo" class="w-full h-auto">
+                        <!--<img src="{{ asset('storage/images/menu/1.jpg') }} " alt = "logo" class="w-full h-auto"> -->
                     </a>
                 </div>
 
