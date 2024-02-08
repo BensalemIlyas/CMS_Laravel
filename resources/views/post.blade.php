@@ -102,13 +102,30 @@
                 })
                 .then(post => {
                     // Construire le HTML pour afficher les détails du post complet
-                    const postDetailsHTML = `
+                    let postDetailsHTML = `
                         <div class="border rounded-lg p-4">
                             <img src="${post.image_path}" alt="${post.title}" class="w-full h-64 object-cover mb-4 rounded">
                             <h1 class="text-2xl font-semibold mb-2">${post.title}</h1>
                             <p class="text-gray-600 mb-2">${post.content}</p>
                             <p>Publié le ${post.published_at}</p>
                         </div>`;
+
+                    // Si des commentaires sont associés à cet article, les afficher
+                    if (post.comments.length > 0) {
+                        postDetailsHTML += `<div class="mt-4 border-t pt-4">
+                        <p class="font-semibold text-center" >Les Commentaires :</p>
+                        </br>`;
+                        post.comments.forEach(comment => {
+                            postDetailsHTML += `
+                                <div class="mb-2">
+                                    <p class="font-semibold">Nom :${comment.nom}</p>
+                                    <p>${comment.contenu}</p>
+                                    <p>Statut: ${comment.statut ? 'Visible' : 'Non visible'}</p>
+                                    <button onclick="changerStatutCommentaire(${comment.id})" class="ml-auto bg-blue-500 text-white px-3 py-1 rounded">Changer Statut</button>
+                                </div>`;
+                        });
+                        postDetailsHTML += `</div>`;
+                    }
 
                     // Afficher les détails du post dans la partie droite
                     document.getElementById('postComplet').innerHTML = postDetailsHTML;
@@ -117,6 +134,30 @@
                     console.error('Erreur lors de la récupération des détails du post :', error.message);
                 });
         }
+
+
+        function changerStatutCommentaire(commentId) {
+            fetch(`/comments/${commentId}`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}', // Ajoutez le jeton CSRF
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erreur de réponse du serveur.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Afficher un message de succès ou mettre à jour l'affichage des commentaires si nécessaire
+                console.log('Statut du commentaire changé avec succès:', data);
+            })
+            .catch(error => {
+                console.error('Erreur lors du changement de statut du commentaire :', error.message);
+            });
+    }
 
     </script>
 @endsection

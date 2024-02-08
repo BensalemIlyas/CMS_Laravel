@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Post;
+use App\Models\Comment;
 
 class PostsController extends Controller
 {
@@ -15,11 +16,11 @@ class PostsController extends Controller
         return view('post', compact('posts'));
     }
 
-   
 
     public function show($id){
         try {
             $post = Post::findOrFail($id);
+            $comments= Comment::where('article_id', $id)->get();
 
             // Retourner les détails du post au format JSON
             return response()->json([
@@ -27,6 +28,7 @@ class PostsController extends Controller
                 'title' => $post->title,
                 'content' => $post->content,
                 'published_at' => $post->published_at,
+                'comments' => $comments
                 // Ajoutez d'autres champs au besoin
             ]);
         } catch (\Exception $e) {
@@ -65,6 +67,20 @@ class PostsController extends Controller
          
         // Redirection ou autre logique après la création du post
         return redirect()->route('posts')->with('success', 'Le post a été créé avec succès.');
+    }
+
+
+    public function toggleStatus($id)
+    {
+        try {
+            $comment = Comment::findOrFail($id);
+            $comment->statut = !$comment->statut; // Inversion du statut
+            $comment->save();
+
+            return response()->json(['success' => true, 'message' => 'Statut du commentaire mis à jour avec succès.']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Erreur lors de la mise à jour du statut du commentaire.'], 500);
+        }
     }
 
 }

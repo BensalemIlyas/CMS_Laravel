@@ -85,16 +85,11 @@
                     document.getElementById('menuForm').addEventListener('submit', (event) => {
                         event.preventDefault(); // Empêcher le comportement par défaut du formulaire
                         const formData = new FormData(document.getElementById('menuForm'));
-                        const formJson = JSON.stringify(Object.fromEntries(formData));
-                        console.log(formJson); // Afficher les données du formulaire en format JSON
-                        console.log(formData); // Afficher les données du formulaire en format FormData
+                        // console.log(formJson); // Afficher les données du formulaire en format JSON
                         // Envoyer les données du formulaire à votre route
                          fetch('/save-menu', {
                              method: 'POST',
-                             body: formJson,
-                             headers: {
-                                 'Content-Type': 'application/json'
-                             }
+                             body: formData
                          })
                          .then(response => {
                              if (!response.ok) {
@@ -124,11 +119,11 @@
                 titlesContainer.innerHTML += `
                     <div class="mt-4">
                         <label for="title${i}" class="block font-semibold">Titre ${i} :</label>
-                        <input type="text" id="title${i}" name="title${i}" class="border-gray-300 border w-full py-2 px-3 rounded mt-1">
+                        <input type="text" id="title${i}" name="title[]" class="border-gray-300 border w-full py-2 px-3 rounded mt-1">
                     </div>
                     <div class="mt-4">
                         <label for="url${i}" class="block font-semibold">URL ${i} :</label>
-                        <input type="text" id="url${i}" name="url${i}" class="border-gray-300 border w-full py-2 px-3 rounded mt-1">
+                        <input type="text" id="url${i}" name="url[]" class="border-gray-300 border w-full py-2 px-3 rounded mt-1">
                     </div>`;
             }
         }

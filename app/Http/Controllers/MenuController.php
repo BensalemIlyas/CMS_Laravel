@@ -45,16 +45,23 @@ class MenuController extends Controller
         // Construisez le JSON du menu en fonction des informations du formulaire
         $menuJson = $request->getContent();
 
+        $json = [
+            "menuId" => $request->menuId,
+            "titlesUriMap" => []
+        ];
+        
+        foreach($request->title as $key => $title) $json["titlesUriMap"][$title] = $request->url[$key];
+
         // Récupérez l'utilisateur authentifié
         $user = auth()->user();
 
         // Créez ou mettez à jour le site associé à l'utilisateur
         $site = $user->site()->updateOrCreate([], [
-            'menu_preferences' => $menuJson,
+            'menu_preferences' => json_encode($json),
             // Ajoutez d'autres champs au besoin
         ]);
 
-        return redirect()->back()->with('success', 'Choix de menu sauvegardé avec succès.');
+        return response()->json(['success' => 'Choix de menu sauvegardé avec succès.']);
     }
 
 

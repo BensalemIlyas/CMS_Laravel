@@ -32,6 +32,9 @@ Route::get('/menu', [MenuController::class, 'menu'])->name('menu');
 Route::get('/menu/{id}', [MenuController::class, 'show'])->name('menu.show');
 Route::post('/save-menu', [MenuController::class, 'save'])->name('save.menu');
 
+Route::post('/comments/{id}', [PostsController::class, 'toggleStatus'])->name('comments.toggle-status');
+
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
