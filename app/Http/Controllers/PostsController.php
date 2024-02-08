@@ -57,6 +57,11 @@ class PostsController extends Controller
 
         // Ajout de la date de publication aux données validées
         $validatedData['published_at'] = $request->input('published_at');
+
+        // Création du post
+        $post = Post::create($validatedData);
+
+        
          
         // Redirection ou autre logique après la création du post
         return redirect()->route('posts')->with('success', 'Le post a été créé avec succès.');

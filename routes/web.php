@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PostsController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MenuController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +27,10 @@ Route::get('/dashboard', function () {
 Route::get('/posts', [PostsController::class, 'post'])->name('posts');
 Route::post('/posts', [PostsController::class, 'store'])->name('posts.store');
 Route::get('/posts/{id}', [PostsController::class, 'show'])->name('post.show');
+
+Route::get('/menu', [MenuController::class, 'menu'])->name('menu');
+Route::get('/menu/{id}', [MenuController::class, 'show'])->name('menu.show');
+Route::post('/save-menu', [MenuController::class, 'save'])->name('save.menu');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

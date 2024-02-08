@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+#menuComplet {
+    max-height: 500px; /* Définir la hauteur maximale selon vos besoins */
+    overflow-y: auto; /* Activer le défilement vertical si nécessaire */
+}
+
