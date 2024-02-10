@@ -41,6 +41,15 @@ class MenuController extends Controller
         //     'num_titles' => 'required|integer|min:1',
         //     'titles.*' => 'required|string',
         // ]);
+        $data = $request->validate([
+           'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Exemple de validation d'image
+        ]);
+
+        // Traitement de l'image s'il est téléchargé
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('images/menu', 'public');
+
+        }
 
         // Construisez le JSON du menu en fonction des informations du formulaire
         $menuJson = $request->getContent();
@@ -58,6 +67,8 @@ class MenuController extends Controller
         // Créez ou mettez à jour le site associé à l'utilisateur
         $site = $user->site()->updateOrCreate([], [
             'menu_preferences' => json_encode($json),
+            'menu_image' => $imagePath
+            
             // Ajoutez d'autres champs au besoin
         ]);
 

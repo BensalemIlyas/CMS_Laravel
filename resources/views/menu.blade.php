@@ -65,6 +65,14 @@
                     menuDetailsHTML += `
                         <form id="menuForm" action={{ route('save.menu') }} method="POST">
                             @csrf
+                            </br>
+                            <div class="mb-4">
+                                <label for="image" class="block text-gray-600 font-semibold">Image de top menu :</label>
+                                <input type="file" id="image" name="image" accept="image/*"
+                                    class="w-full border-b-2 border-gray-300 p-2 focus:outline-none focus:border-green-500"
+                                    required>
+                            </div>
+                            </br>
                             <input type="hidden" name="menuId" value="${menuId}">
                             <div id="titlesContainer" class="mt-4"></div>
                             <div class="mt-4">

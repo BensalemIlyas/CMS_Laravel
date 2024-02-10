@@ -121,7 +121,7 @@
                                     <p class="font-semibold">Nom :${comment.nom}</p>
                                     <p>${comment.contenu}</p>
                                     <p>Statut: ${comment.statut ? 'Visible' : 'Non visible'}</p>
-                                    <button onclick="changerStatutCommentaire(${comment.id})" class="ml-auto bg-blue-500 text-white px-3 py-1 rounded">Changer Statut</button>
+                                    <button onclick="changerStatutCommentaire(${comment.id})" class="ml-auto bg-blue-500 text-white px-3 py-1 rounded font-semibold text-center">Changer Statut</button>
                                 </div>`;
                         });
                         postDetailsHTML += `</div>`;

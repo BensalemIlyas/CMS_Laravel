@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sites', function (Blueprint $table) {
+        Schema::create('themes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->json('menu_preferences')->nullable();
-            $table->json('theme_preferences')->nullable();
-            $table->string('menu_image')->nullable();
-            // Ajoutez d'autres colonnes au besoin
+            $table->string('name');
+            $table->string('police');
+            $table->string('background_color');
+            $table->string('couleur_sep');
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sites');
+        Schema::dropIfExists('themes');
     }
 };

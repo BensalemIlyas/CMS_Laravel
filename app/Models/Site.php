@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Site extends Model
 {
     protected $fillable = [
-        'user_id', 'menu_preferences', // autres colonnes
+        'user_id', 'menu_preferences','menu_image','theme_preferences' // autres colonnes
     ];
 
     protected $casts = [
@@ -20,9 +20,15 @@ class Site extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function themes()
+    {
+        return $this->belongsTO(Theme::class);
+    }
+
     public function articles()
     {
         return $this->hasMany(Article::class);
     }
     use HasFactory;
+
 }

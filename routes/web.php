@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PostsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\ThemeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +32,10 @@ Route::get('/posts/{id}', [PostsController::class, 'show'])->name('post.show');
 Route::get('/menu', [MenuController::class, 'menu'])->name('menu');
 Route::get('/menu/{id}', [MenuController::class, 'show'])->name('menu.show');
 Route::post('/save-menu', [MenuController::class, 'save'])->name('save.menu');
+
+Route::get('/theme', [ThemeController::class, 'theme'])->name('theme');
+Route::get('/theme/{id}', [ThemeController::class, 'show'])->name('theme.show');
+Route::post('/save-theme', [ThemeController::class, 'save'])->name('save.theme');
 
 Route::post('/comments/{id}', [PostsController::class, 'toggleStatus'])->name('comments.toggle-status');
 
