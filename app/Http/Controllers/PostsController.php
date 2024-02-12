@@ -16,6 +16,19 @@ class PostsController extends Controller
         return view('post', compact('posts'));
     }
 
+    public function deletePost(Request $request){
+        $response = ["success" => true,"token" => csrf_token()];
+        try{
+            Post::destroy($request->postId);
+        }
+        catch(\Throwable $e){
+            $response["success"] = false;
+            $response["errorMessage"] = $e->getMessage();
+        }
+
+        return response()->json($response);
+    }
+
 
     public function show($id){
         try {
@@ -50,7 +63,7 @@ class PostsController extends Controller
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Exemple de validation d'image
         ]);
 
-        
+
         // Traitement de l'image s'il est téléchargé
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('images/posts', 'public');
@@ -63,8 +76,8 @@ class PostsController extends Controller
         // Création du post
         $post = Post::create($validatedData);
 
-        
-         
+
+
         // Redirection ou autre logique après la création du post
         return redirect()->route('posts')->with('success', 'Le post a été créé avec succès.');
     }

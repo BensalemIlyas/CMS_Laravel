@@ -15,7 +15,7 @@
                 <!-- Boucle sur les posts (peut être dynamique selon le backend) -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     @foreach ($posts as $post)
-                        <div class="bg-white p-6 rounded-lg shadow-md">
+                        <div class="bg-white p-6 rounded-lg shadow-md" id="post-{{ $post->id  }}">
                             <img src="{{ asset('storage/' . $post->image_path) }}" alt="{{ $post->title }}"
                                 class="w-full h-32 object-cover mb-2 rounded">
                             <h2 class="text-xl font-semibold mb-2">{{ $post->title }}</h2>
@@ -73,7 +73,7 @@
         <!-- Section Affichage Complet (à droite) -->
         <div class="w-1/2 pl-4 border-l border-gray-300" id="postComplet">
             <!-- Le contenu complet du post sera affiché ici -->
-            
+
         </div>
 
     </div>
@@ -92,6 +92,8 @@
 
         });
 
+        let token = "{{csrf_token()}}";
+
         function afficherPostComplet(postId) {
             fetch(`/posts/${postId}`)
                 .then(response => {
@@ -108,6 +110,9 @@
                             <h1 class="text-2xl font-semibold mb-2">${post.title}</h1>
                             <p class="text-gray-600 mb-2">${post.content}</p>
                             <p>Publié le ${post.published_at}</p>
+                            <button class="deletePost bg-red-500 text-white px-4 py-2 rounded mt-4 hover:bg-red-600 transition duration-300 ease-in-out">
+                                Supprimer
+                            </button>
                         </div>`;
 
                     // Si des commentaires sont associés à cet article, les afficher
@@ -128,7 +133,40 @@
                     }
 
                     // Afficher les détails du post dans la partie droite
-                    document.getElementById('postComplet').innerHTML = postDetailsHTML;
+                    const postComplet =  document.getElementById('postComplet');
+                    postComplet.innerHTML = postDetailsHTML;
+                    postComplet.querySelector('.deletePost').addEventListener('click', event => {
+                        const form = new FormData();
+
+                        form.append("postId",postId);
+                        form.append("_token",token);
+
+                        const options = {
+                            method: "post",
+                            body: form
+                        };
+
+                        fetch("{{route("post.delete")}}",options).then(response => response.json()).then(dataJson => {
+                            if(dataJson.success){
+                                token = dataJson.token;
+                                postComplet.innerHTML = "";
+                                const postContainer = document.querySelector(`#post-${postId}`);
+
+                                postContainer.animate({opacity: 0},400).addEventListener("finish",() => {
+                                    postContainer.remove();
+                                });
+
+                            }else{
+                                alert(dataJson.error);
+                            }
+
+                        }).catch(error => {
+                            console.log(error)
+                            alert("Une erreur s'est produitkjhjgfde")
+                        });
+
+                    })
+
                 })
                 .catch(error => {
                     console.error('Erreur lors de la récupération des détails du post :', error.message);
