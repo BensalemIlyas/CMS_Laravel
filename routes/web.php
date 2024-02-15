@@ -39,8 +39,10 @@ Route::get('/theme', [ThemeController::class, 'theme'])->name('theme');
 Route::get('/theme/{id}', [ThemeController::class, 'show'])->name('theme.show');
 Route::post('/save-theme', [ThemeController::class, 'save'])->name('save.theme');
 
-Route::post('/comments/{id}', [PostsController::class, 'toggleStatus'])->name('comments.toggle-status');
+Route::get('site', [Site::class, 'displayWebsite']) -> name('site');
 
+Route::post('/comments/{id}', [PostsController::class, 'toggleStatus'])->name('comments.toggle-status');
+Route::get('/comments/{id}', [PostsController::class, 'getStatus'])-> name('comments.get-status');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

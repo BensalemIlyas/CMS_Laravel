@@ -125,8 +125,8 @@
                                 <div class="mb-2">
                                     <p class="font-semibold">Nom :${comment.nom}</p>
                                     <p>${comment.contenu}</p>
-                                    <p>Statut: ${comment.statut ? 'Visible' : 'Non visible'}</p>
-                                    <button onclick="changerStatutCommentaire(${comment.id})" class="ml-auto bg-blue-500 text-white px-3 py-1 rounded font-semibold text-center">Changer Statut</button>
+                                    <p id="comment-${postId}-${comment.id}" > Statut: ${comment.statut ? 'Visible' : 'Non visible'}</p>
+                                    <button id ="buttonChangerStatut" onclick="changerStatutCommentaire(${postId}, ${comment.id})" class="ml-auto bg-blue-500 text-white px-3 py-1 rounded font-semibold text-center">Changer Statut</button>
                                 </div>`;
                         });
                         postDetailsHTML += `</div>`;
@@ -173,8 +173,12 @@
                 });
         }
 
+        function changerStatutCommentaire(postId, commentId) {
 
-        function changerStatutCommentaire(commentId) {
+
+            let comment = document.getElementById(`comment-${postId}-${commentId}`);
+            let buttonChangerStatut = document.getElementById('buttonChangerStatut');
+
             fetch(`/comments/${commentId}`, {
                 method: 'POST',
                 headers: {
@@ -189,8 +193,14 @@
                 return response.json();
             })
             .then(data => {
+
+                let commentStatut = data.statut ? 'Visible' : 'Non visible';
+                comment.textContent =  'Statut: ' + commentStatut ;
                 // Afficher un message de succès ou mettre à jour l'affichage des commentaires si nécessaire
                 console.log('Statut du commentaire changé avec succès:', data);
+                // buttonChangerStatut.disabled = true;
+                // setTimeout(()=>buttonChangerStatut.disabled = false, 800);
+
             })
             .catch(error => {
                 console.error('Erreur lors du changement de statut du commentaire :', error.message);
