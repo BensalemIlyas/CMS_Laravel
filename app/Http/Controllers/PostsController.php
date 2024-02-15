@@ -90,7 +90,24 @@ class PostsController extends Controller
             $comment->statut = !$comment->statut; // Inversion du statut
             $comment->save();
 
-            return response()->json(['success' => true, 'message' => 'Statut du commentaire mis à jour avec succès.']);
+            return response()->json([
+                'success' => true,
+                'message' => 'Statut du commentaire mis à jour avec succès',
+                'statut' => $comment->statut]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Erreur lors de la mise à jour du statut du commentaire.'], 500);
+        }
+    }
+
+    public function getStatus($id)
+    {
+        try {
+            $comment = Comment::findOrFail($id);
+            return response()->json([
+                'success' => true,
+                'message' => 'Statut du commentaire mis à jour avec succès',
+                'commentStatut' => $comment->statut]);
+
         } catch (\Exception $e) {
             return response()->json(['error' => 'Erreur lors de la mise à jour du statut du commentaire.'], 500);
         }

@@ -82,11 +82,11 @@
                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                         <path :class="{ 'hidden': open, 'inline-flex': !open }" class="inline-flex"
                             stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6h16M4 12h16M4 18h16" />     
+                            d="M4 6h16M4 12h16M4 18h16" />
                         <path :class="{ 'hidden': !open, 'inline-flex': open }" class="hidden" stroke-linecap="round"
                             stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
-                    
+
                 </button>
             </div>
         </div>
@@ -112,6 +112,12 @@
         <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
             <x-nav-link :href="route('theme')" :active="request()->routeIs('theme')">
                 {{ __('Theme') }}
+            </x-nav-link>
+        </div>
+
+        <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+            <x-nav-link :href="route('site')" :active="request()->routeIs('site')">
+                {{ __('site') }}
             </x-nav-link>
         </div>
 
