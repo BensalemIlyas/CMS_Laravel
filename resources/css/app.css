@@ -7,3 +7,24 @@
     overflow-y: auto; /* Activer le défilement vertical si nécessaire */
 }
 
+.hamburger-menu {
+    display: block;
+}
+
+.menu-icon {
+    cursor: pointer;
+}
+
+.menu {
+    display: none;
+}
+
+#checked{
+    display: none;
+}
+
+#checked:checked + .menu {
+    display: block;
+}
+
+

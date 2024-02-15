@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Menu extends Model
 {
-    protected $fillable = ['nom','type', 'image_path'];
-
+    public $timestamps = false;
+    protected $fillable = ['nom', 'image_path'];
     use HasFactory;
 
 }

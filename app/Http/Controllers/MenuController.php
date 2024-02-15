@@ -15,6 +15,30 @@ class MenuController extends Controller
         return view('menu', compact('menus'));
     }
 
+
+    public function sauvegarder(Request $request){
+        $data = $request->validate([
+            'nom' => 'required',
+            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+        ]);
+
+        
+        // Traitement de l'image s'il est téléchargé
+        if ($request->hasFile('image')) {
+            $data['image']  = $request->file('image')->store('images/menu', 'public');
+        }
+        // Créez un nouveau menu
+        $menu = Menu::create([
+            'nom' => $data['nom'],
+            'image_path' => $data['image']
+            // Ajoutez d'autres champs au besoin
+        ]);
+
+
+        return response()->json(['success' => 'Menu créé avec succès.']);
+        alert ("Menu créé avec succès.");
+    }
+
     public function show($id){
         try {
             $menu = Menu::findOrFail($id);
@@ -35,14 +59,10 @@ class MenuController extends Controller
 
     public function save(Request $request)
     {
-        // // Validez et traitez les données du formulaire
-        // $request->validate([
-        //     'menu_id' => 'required|integer|min:1',
-        //     'num_titles' => 'required|integer|min:1',
-        //     'titles.*' => 'required|string',
-        // ]);
+        
         $data = $request->validate([
            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Exemple de validation d'image
+
         ]);
 
         // Traitement de l'image s'il est téléchargé
@@ -50,9 +70,6 @@ class MenuController extends Controller
             $imagePath = $request->file('image')->store('images/menu', 'public');
 
         }
-
-        // Construisez le JSON du menu en fonction des informations du formulaire
-        $menuJson = $request->getContent();
 
         $json = [
             "menuId" => $request->menuId,
@@ -64,6 +81,8 @@ class MenuController extends Controller
         // Récupérez l'utilisateur authentifié
         $user = auth()->user();
 
+        
+
         // Créez ou mettez à jour le site associé à l'utilisateur
         $site = $user->site()->updateOrCreate([], [
             'menu_preferences' => json_encode($json),
@@ -73,6 +92,7 @@ class MenuController extends Controller
         ]);
 
         return response()->json(['success' => 'Choix de menu sauvegardé avec succès.']);
+
     }
 
 

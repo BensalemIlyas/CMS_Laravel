@@ -2,6 +2,8 @@
 
 1-npm i pour l'installation
 
+composer install 
+
 2-php artisan migrate pour la creation des tables dans la bd(mais avant faudra créer une base de donnée du nom de laravel<ou du moins nom spécifié dans le fichier>)
 
 php artisan migrate:refresh dans le cas d'une reinitialisation

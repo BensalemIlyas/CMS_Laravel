@@ -5,6 +5,7 @@ use App\Http\Controllers\PostsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\ThemeController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,9 +22,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'site'])->middleware(['auth', 'verified'])->name('dashboard');
+
 
 Route::get('/posts', [PostsController::class, 'post'])->name('posts');
 Route::post('/posts', [PostsController::class, 'store'])->name('posts.store');
@@ -33,6 +33,7 @@ Route::post("/posts/supprimer",[PostsController::class,"deletePost"])->name("pos
 Route::get('/menu', [MenuController::class, 'menu'])->name('menu');
 Route::get('/menu/{id}', [MenuController::class, 'show'])->name('menu.show');
 Route::post('/save-menu', [MenuController::class, 'save'])->name('save.menu');
+Route::post('/menu', [MenuController::class, 'sauvegarder']);
 
 Route::get('/theme', [ThemeController::class, 'theme'])->name('theme');
 Route::get('/theme/{id}', [ThemeController::class, 'show'])->name('theme.show');
