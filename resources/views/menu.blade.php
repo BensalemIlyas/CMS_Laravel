@@ -2,9 +2,34 @@
 
 @section('content')
     <div class="container mx-auto mt-8 flex">
-
+        
+         
+         
         <!-- Section Liste des Menus (à gauche) -->
         <div class="w-1/2 pr-4 overflow-y-auto max-h-screen">
+
+        <form id="siteForm" action="{{ route('save.site') }}" method="POST">
+            @csrf
+            <div class="mb-4">
+                <label for="siteName" class="block text-gray-600 font-semibold">Nom du site :</label>
+                <input type="text" id="siteName" name="siteName" class="border-gray-300 border w-full py-2 px-3 rounded mt-1">
+            </div>
+            <div class="mt-4">
+                <button type="submit" id="valider" class="bg-blue-500 text-white px-4 py-2 rounded">Valider</button>
+            </div>
+            <br>
+
+                @if ($sites)
+                <!-- Vérifiez si un chemin d'image est défini -->
+                    @if ($sites->menu_image)
+                        <img  src="{{ asset('storage/' . $sites->menu_image) }}" alt="Menu Image">
+                    @else
+                        <p>Aucune image de menu n'est disponible</p>
+                    @endif
+                @endif
+
+        </form>
+            
             <div class="flex items-center justify-between mb-4">
                 <h1 class="text-3xl font-semibold">Choix du Menu</h1>
             </div>
@@ -23,6 +48,7 @@
                         </div>
                     @endforeach
                 </div>
+                
             </div>
 
         </div>
@@ -61,6 +87,7 @@
     </div>
 
     <script>
+    
         function afficherMenuComplet(menuId) {
             fetch(`/menu/${menuId}`)
                 .then(response => {
@@ -91,12 +118,7 @@
                         <form id="menuForm" action={{ route('save.menu') }} method="POST">
                             @csrf
                             </br>
-                            <div class="mb-4">
-                                <label for="image" class="block text-gray-600 font-semibold">Image de top menu :</label>
-                                <input type="file" id="image" name="image" accept="image/*"
-                                    class="w-full border-b-2 border-gray-300 p-2 focus:outline-none focus:border-green-500"
-                                    required>
-                            </div>
+                            
                             </br>
                             <input type="hidden" name="menuId" value="${menuId}">
                             <div id="titlesContainer" class="mt-4"></div>

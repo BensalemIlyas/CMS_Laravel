@@ -34,15 +34,16 @@ Route::get('/menu', [MenuController::class, 'menu'])->name('menu');
 Route::get('/menu/{id}', [MenuController::class, 'show'])->name('menu.show');
 Route::post('/save-menu', [MenuController::class, 'save'])->name('save.menu');
 Route::post('/menu', [MenuController::class, 'sauvegarder']);
+Route::post('/menu', [MenuController::class, 'saveImage'])->name('save.site');
+
+
 
 Route::get('/theme', [ThemeController::class, 'theme'])->name('theme');
 Route::get('/theme/{id}', [ThemeController::class, 'show'])->name('theme.show');
 Route::post('/save-theme', [ThemeController::class, 'save'])->name('save.theme');
 
-Route::get('site', [Site::class, 'displayWebsite']) -> name('site');
-
 Route::post('/comments/{id}', [PostsController::class, 'toggleStatus'])->name('comments.toggle-status');
-Route::get('/comments/{id}', [PostsController::class, 'getStatus'])-> name('comments.get-status');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

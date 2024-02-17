@@ -115,11 +115,7 @@
             </x-nav-link>
         </div>
 
-        <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-            <x-nav-link :href="route('site')" :active="request()->routeIs('site')">
-                {{ __('site') }}
-            </x-nav-link>
-        </div>
+        
 
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">
