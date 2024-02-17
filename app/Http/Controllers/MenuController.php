@@ -63,16 +63,6 @@ class MenuController extends Controller
     public function save(Request $request)
     {
         
-        $data = $request->validate([
-           'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Exemple de validation d'image
-
-        ]);
-
-        // Traitement de l'image s'il est téléchargé
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('images/menu', 'public');
-
-        }
 
         $json = [
             "menuId" => $request->menuId,
@@ -88,8 +78,7 @@ class MenuController extends Controller
 
         // Créez ou mettez à jour le site associé à l'utilisateur
         $site = $user->site()->updateOrCreate([], [
-            'menu_preferences' => json_encode($json),
-            'menu_image' => $imagePath
+            'menu_preferences' => json_encode($json)
             
             // Ajoutez d'autres champs au besoin
         ]);

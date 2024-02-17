@@ -11,7 +11,7 @@ class Comment extends Model
 
     public function article()
     {
-        return $this->belongsTo(Article::class);
+        return $this->belongsTo(Post::class,'article_id');
     }
     use HasFactory;
 }
