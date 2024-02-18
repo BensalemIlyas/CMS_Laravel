@@ -83,6 +83,7 @@
             // Basculer entre l'affichage de la liste des posts et du formulaire d'ajout
             document.getElementById('listeDesPosts').classList.toggle('hidden');
             document.getElementById('formulaireAjoutPost').classList.toggle('hidden');
+            
         });
 
         document.getElementById('annulerajout').addEventListener('click', function() {
@@ -162,7 +163,7 @@
 
                         }).catch(error => {
                             console.log(error)
-                            alert("Une erreur s'est produitkjhjgfde")
+                            alert("Une erreur s'est produit")
                         });
 
                     })

@@ -54,7 +54,7 @@ class ThemeController extends Controller
 
             // Ajoutez d'autres champs au besoin
         ]);
-
+        
          return view('theme');
 
     }

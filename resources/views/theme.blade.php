@@ -19,7 +19,8 @@
                     <input type="color" id="separation_color" name="separation_color" class="border-gray-300 border py-2 px-3 rounded mt-1">
                 </div>
                 <button type="submit" id="enregistrement" class="bg-blue-500 text-white px-4 py-2 rounded mt-4">Enregistrer</button>
-            </form>`;
+                
+            </form>
 
         </div>
     </div>

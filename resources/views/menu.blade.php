@@ -128,6 +128,7 @@
                             </div>
                            
                         </form>`;
+                        
                     // Afficher les détails du menu dans la partie droite
                     document.getElementById('menuComplet').innerHTML = menuDetailsHTML;
 
@@ -155,6 +156,8 @@
                          })
                          .then(data => {
                              console.log('Réponse du serveur :', data);
+                             alert('Choix effectuée avec succès !');
+                             window.location.reload();
                          })
                          .catch(error => {
                              console.error('Erreur lors de la soumission du formulaire :', error.message);
