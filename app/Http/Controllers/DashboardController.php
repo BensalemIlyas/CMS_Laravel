@@ -15,7 +15,7 @@ class DashboardController extends Controller{
         $user = auth()->user();
         $site = Site::where('user_id', $user->id)->first();
         $articles = Post::all();
-        $comments= Comment::where('statut', 0)->where('article_id', $articles[0]->id)->get();
+        $comments= Comment::where('statut', 1)->where('article_id', $articles[0]->id)->get();
 
        
         if ($site) {

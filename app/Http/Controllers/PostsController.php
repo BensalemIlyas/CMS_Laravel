@@ -32,8 +32,9 @@ class PostsController extends Controller
 
     public function show($id){
         try {
+            
             $post = Post::findOrFail($id);
-            $comments= Comment::where('article_id', $id)->get();
+            $comments= Comment::where('article_id', $id)->where('statut', 1)->get();
 
             // Retourner les détails du post au format JSON
             return response()->json([
@@ -111,6 +112,22 @@ class PostsController extends Controller
         } catch (\Exception $e) {
             return response()->json(['error' => 'Erreur lors de la mise à jour du statut du commentaire.'], 500);
         }
+    }
+
+    public function storecomment (Request $request)
+    {
+        // Validation des données du formulaire
+        $validatedData = $request->validate([
+            'nom' => 'required|max:255',
+            'contenu' => 'required',
+            'article_id' => 'required|exists:posts,id',
+        ]);
+
+        // Création du commentaire
+        $comment = Comment::create($validatedData);
+
+        // Redirection ou autre logique après la création du commentaire
+        return redirect()->route('dashboard')->with('success', 'Le commentaire a été ajouté avec succès.');
     }
 
 }

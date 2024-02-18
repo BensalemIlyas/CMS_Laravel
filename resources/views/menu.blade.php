@@ -2,24 +2,23 @@
 
 @section('content')
     <div class="container mx-auto mt-8 flex">
-        
-         
-         
         <!-- Section Liste des Menus (à gauche) -->
         <div class="w-1/2 pr-4 overflow-y-auto max-h-screen">
 
         <form id="siteForm" action="{{ route('save.site') }}" method="POST">
             @csrf
-            <div class="mb-4">
+            <div class="mb-4 ml-5">
                 <label for="siteName" class="block text-gray-600 font-semibold">Nom du site :</label>
-                <input type="text" id="siteName" name="siteName" class="border-gray-300 border w-full py-2 px-3 rounded mt-1">
+                <input type="text" id="siteName" name="siteName" class="border-gray-300 border  py-2 px-3 rounded mt-1 mr-4">
+                <button type="submit" id="valider" class="bg-blue-500 text-white px-4 py-2 rounded">Valider</button>
             </div>
             <div class="mt-4">
-                <button type="submit" id="valider" class="bg-blue-500 text-white px-4 py-2 rounded">Valider</button>
+                
             </div>
             <br>
 
-                @if ($sites)
+                <div class="flex justify-center">
+                    @if ($sites)
                 <!-- Vérifiez si un chemin d'image est défini -->
                     @if ($sites->menu_image)
                         <img  src="{{ asset('storage/' . $sites->menu_image) }}" alt="Menu Image">
@@ -27,6 +26,8 @@
                         <p>Aucune image de menu n'est disponible</p>
                     @endif
                 @endif
+                </div>
+                <br>
 
         </form>
             

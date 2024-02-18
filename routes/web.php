@@ -29,6 +29,7 @@ Route::get('/posts', [PostsController::class, 'post'])->name('posts');
 Route::post('/posts', [PostsController::class, 'store'])->name('posts.store');
 Route::get('/posts/{id}', [PostsController::class, 'show'])->name('post.show');
 Route::post("/posts/supprimer",[PostsController::class,"deletePost"])->name("post.delete");
+Route::post('/comment', [PostsController::class, 'storeComment'])->name('comment.store');
 
 Route::get('/menu', [MenuController::class, 'menu'])->name('menu');
 Route::get('/menu/{id}', [MenuController::class, 'show'])->name('menu.show');
