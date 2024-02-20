@@ -27,4 +27,10 @@
     display: block;
 }
 
+input[type="color"]{
+    display: block;
+    height: 50px;
+    width: 300px;
+}
+
 

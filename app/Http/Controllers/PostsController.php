@@ -32,7 +32,7 @@ class PostsController extends Controller
 
     public function show($id){
         try {
-            
+
             $post = Post::findOrFail($id);
             $comments= Comment::where('article_id', $id)->where('statut', 1)->get();
 
@@ -121,17 +121,32 @@ class PostsController extends Controller
     public function storecomment (Request $request)
     {
         // Validation des données du formulaire
-        $validatedData = $request->validate([
+        /*$validatedData = $request->validate([
             'nom' => 'required|max:255',
             'contenu' => 'required',
             'article_id' => 'required|exists:posts,id',
-        ]);
+        ]);*/
 
         // Création du commentaire
-        $comment = Comment::create($validatedData);
 
-        // Redirection ou autre logique après la création du commentaire
-        return redirect()->route('dashboard')->with('success', 'Le commentaire a été ajouté avec succès.');
+
+        $response = ["success" => true];
+        try{
+            $comment = Comment::create([
+                'nom' => $request['nom'],
+                'contenu' => $request['contenu'],
+                'article_id' => $request['article_id'],
+                'statut' => $request['statut']
+            ]);
+        }
+        catch(\Throwable $e){
+            $response["success"] = false;
+            $response["errorMessage"] = $e->getMessage();
+        }
+
+        return response()->json($response);
+
+
     }
 
 }

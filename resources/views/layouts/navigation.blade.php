@@ -7,8 +7,8 @@
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}">
                         <!-- <x-application-logo class="block h-9 w-auto fill-current text-gray-800" /> -->
-                        <img src="C:\xampp\htdocs\LARAVEL\CMS_Laravel\public\storage\images\menu\1.jpg" alt = "logo" class="w-full h-auto">
-                        <!--<img src="{{ asset('storage/images/menu/1.jpg') }} " alt = "logo" class="w-full h-auto"> -->
+                        <img src="{{ asset('storage/images/welcome/logo.jpg') }}" alt = "logo" height="20px" width="30px">
+                        <!--<img src="{{ asset('storage/images/welcome/logo.jpg') }} " alt = "logo" class="w-full h-auto"> -->
                     </a>
                 </div>
 
@@ -115,7 +115,7 @@
             </x-nav-link>
         </div>
 
-        
+
 
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">

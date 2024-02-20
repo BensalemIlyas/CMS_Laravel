@@ -13,7 +13,7 @@
                 <button type="submit" id="valider" class="bg-blue-500 text-white px-4 py-2 rounded">Valider</button>
             </div>
             <div class="mt-4">
-                
+
             </div>
             <br>
 
@@ -30,7 +30,7 @@
                 <br>
 
         </form>
-            
+
             <div class="flex items-center justify-between mb-4">
                 <h1 class="text-3xl font-semibold">Choix du Menu</h1>
             </div>
@@ -49,7 +49,7 @@
                         </div>
                     @endforeach
                 </div>
-                
+
             </div>
 
         </div>
@@ -57,20 +57,20 @@
         <!-- Section Affichage Complet (à droite) -->
         <div class="w-1/2 pl-4 border-l border-gray-300" id="menuComplet">
             <!-- Le contenu complet du post sera affiché ici -->
-            
+
         </div>
 
-        
 
 
-        
+
+
 
 
 
     </div>
 
     <script>
-    
+
         function afficherMenuComplet(menuId) {
             fetch(`/menu/${menuId}`)
                 .then(response => {
@@ -87,13 +87,7 @@
                             <img src="${menu.image_path}" alt="${menu.nom}" class="w-full h-64 object-cover mb-4 rounded">
                         </div>`;
 
-                    // Ajouter des champs d'entrée pour spécifier le nombre de titres
-                    menuDetailsHTML += `
-                        <div class="mt-4">
-                            <label for="numTitles" class="block font-semibold">Nombre de Titres :</label>
-                            <input type="number" id="numTitles" name="numTitles" class="border-gray-300 border py-2 px-3 rounded mt-1">
-                            <button id="submitTitlesBtn" class="bg-blue-500 text-white px-4 py-2 rounded">Valider</button>
-                        </div>`;
+
 
 
                     // Ajouter un formulaire pour encapsuler les champs d'entrée
@@ -101,25 +95,19 @@
                         <form id="menuForm" action={{ route('save.menu') }} method="POST">
                             @csrf
                             </br>
-                            
+
                             </br>
                             <input type="hidden" name="menuId" value="${menuId}">
-                            <div id="titlesContainer" class="mt-4"></div>
+
                             <div class="mt-4">
                                 <button type="submit" id="enregistrement" class="bg-blue-500 text-white px-4 py-2 rounded">Enregistrer</button>
                             </div>
-                           
+
                         </form>`;
-                        
+
                     // Afficher les détails du menu dans la partie droite
                     document.getElementById('menuComplet').innerHTML = menuDetailsHTML;
 
-                    // Écouter l'événement de clic sur le bouton pour ajouter les champs d'entrée des titres
-                    document.getElementById('submitTitlesBtn').addEventListener('click', () => {
-                        const numTitles = document.getElementById('numTitles').value;
-                        afficherChampsTitres(numTitles);
-                    });
-                    
                     // Écouter l'événement de soumission du formulaire pour enregistrer le menu
                     document.getElementById('menuForm').addEventListener('submit', (event) => {
                         event.preventDefault(); // Empêcher le comportement par défaut du formulaire
@@ -151,23 +139,7 @@
                 });
         }
 
-        function afficherChampsTitres(numTitles) {
-            const titlesContainer = document.getElementById('titlesContainer');
-            titlesContainer.innerHTML = ''; // Effacer le contenu précédent
 
-            // Ajouter des champs d'entrée pour les noms et les URLs des titres en fonction du nombre spécifié
-            for (let i = 1; i <= numTitles; i++) {
-                titlesContainer.innerHTML += `
-                    <div class="mt-4">
-                        <label for="title${i}" class="block font-semibold">Titre ${i} :</label>
-                        <input type="text" id="title${i}" name="title[]" class="border-gray-300 border w-full py-2 px-3 rounded mt-1">
-                    </div>
-                    <div class="mt-4">
-                        <label for="url${i}" class="block font-semibold">URL ${i} :</label>
-                        <input type="text" id="url${i}" name="url[]" class="border-gray-300 border w-full py-2 px-3 rounded mt-1">
-                    </div>`;
-            }
-        }
 
     </script>
 @endsection

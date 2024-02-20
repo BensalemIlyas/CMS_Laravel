@@ -13,7 +13,10 @@ class ThemeController extends Controller
     public function theme()
     {
         $themes = Theme::all();
-        return view('theme', compact('themes'));
+        $background_color ='#f3f1f1';
+        $police ='#121212' ;
+        $couleur_sep = '#29b9d6';
+        return view('theme', compact('themes','background_color','police','couleur_sep'));
     }
 
     public function show($id)
@@ -55,8 +58,11 @@ class ThemeController extends Controller
             // Ajoutez d'autres champs au besoin
         ]);
         $user->update(['site' => true]);
-        
-         return view('theme');
+
+        $background_color = $request->background_color;
+        $police = $request->police;
+        $couleur_sep = $request->separation_color;
+        return view('theme', compact('background_color','police','couleur_sep'));
 
     }
 

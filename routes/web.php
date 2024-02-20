@@ -23,7 +23,7 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', [DashboardController::class, 'accueil'])->middleware(['auth', 'verified'])->name('dashboard');
-Route::get('/dashboard/articles', [DashboardController::class, 'site'])->middleware(['auth', 'verified']);
+Route::get('/dashboard/articles', [DashboardController::class, 'site'])->middleware(['auth', 'verified'])->name('dashboard_articles');
 
 
 Route::get('/posts', [PostsController::class, 'post'])->name('posts');

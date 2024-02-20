@@ -9,7 +9,7 @@ use App\Models\Site;
 
 class MenuController extends Controller
 {
-    
+
     public function menu()
     {
         $menus = Menu::all();
@@ -23,7 +23,7 @@ class MenuController extends Controller
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
 
-        
+
         // Traitement de l'image s'il est téléchargé
         if ($request->hasFile('image')) {
             $data['image']  = $request->file('image')->store('images/menu', 'public');
@@ -48,7 +48,7 @@ class MenuController extends Controller
             return response()->json([
                 'nom' => $menu->nom,
                 'image_path' => asset('storage/' . $menu->image_path)
-                
+
                 // Ajoutez d'autres champs au besoin
             ]);
         } catch (\Exception $e) {
@@ -62,27 +62,23 @@ class MenuController extends Controller
 
     public function save(Request $request)
     {
-        
 
         $json = [
             "menuId" => $request->menuId,
-            "titlesUriMap" => []
         ];
-        
-        foreach($request->title as $key => $title) $json["titlesUriMap"][$title] = $request->url[$key];
 
         // Récupérez l'utilisateur authentifié
         $user = auth()->user();
-       
+
         // Créez ou mettez à jour le site associé à l'utilisateur
         $site = $user->site()->updateOrCreate([], [
             'menu_preferences' => json_encode($json)
-            
+
             // Ajoutez d'autres champs au besoin
         ]);
 
          $user->update(['site' => true]);
-       
+
 
         return response()->json(['success' => 'Choix de menu sauvegardé avec succès.']);
 
@@ -118,7 +114,7 @@ class MenuController extends Controller
 
         // Dessiner le texte au centre de l'image
         imagestring($image, 7, $textX, $textY, $siteName, $textColor); // 5 est la taille de la police, ajustez-la selon vos besoins
-      
+
 
         // Chemin de stockage de l'image
         $imagePath = 'images/menu/' . $siteName . '.png';
@@ -130,14 +126,14 @@ class MenuController extends Controller
         $user = auth()->user();
         $site = $user->site()->updateOrCreate([], [
             'menu_image' => $imagePath
-            
+
             // Ajoutez d'autres champs au besoin
         ]);
 
         // Retourner le chemin de l'image sauvegardée
         $menus = Menu::all();
         $user->update(['site' => true]);
-        $sites = Site::where('user_id', auth()->user()->id)->first(); 
+        $sites = Site::where('user_id', auth()->user()->id)->first();
         return view('menu',compact('menus', 'sites'))->with('success', 'Image de menu sauvegardée avec succès.');
     }
 

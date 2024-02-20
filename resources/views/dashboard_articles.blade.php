@@ -10,6 +10,9 @@
                         color: {{ $themePreferences->police }} !important;
 
                     }
+                    .border{
+                        border: 3px solid {{$themePreferences->couleur_sep}};
+                    }
                 </style>
             @endif
         </h2>
@@ -76,7 +79,7 @@
                             <br>
 
                             <!-- Partie droite du body  -->
-                            <div class="w-2/3 pl-4 border-l border-gray-300" id="article-details">
+                            <div class="w-2/3 pl-4 border-l border-gray-300 text-justify" id="article-details">
                                 <!-- Affichage du premier article par défaut -->
                                 @if ($articles->isNotEmpty())
                                     <div class="p-4 border rounded-lg shadow-md">
@@ -88,14 +91,16 @@
                                         </h2>
                                         <p class="text-gray-700" id="article-content">{{ $articles[0]->content }}</p>
                                         <br>
+                                         <!-- Bouton "Voir les commentaires" -->
+                                        <button id="toggle-comments-btn"
+                                            class="bg-blue-500 text-white px-4 py-2 rounded">Voir les
+                                            commentaires</button>
+
                                         <!-- Liste des commentaires -->
-                                        <div class="mt-4 ">
-                                            <!-- Bouton "Voir les commentaires" -->
-                                            <button id="toggle-comments-btn"
-                                                class="bg-blue-500 text-white px-4 py-2 rounded">Voir les
-                                                commentaires</button>
+                                        <div id="toggleComments" style="display:none;" class="mt-4 ">
 
                                             <!-- Liste des commentaires (initialement cachée) -->
+
                                             <div class="mt-4" id="comment-list" style="display: none;">
                                                 <h3 class="text-xl font-semibold mb-2 flex justify-center">Commentaires</h3>
                                                 @if ($comments->isNotEmpty())
@@ -110,24 +115,25 @@
                                                 @else
                                                     <p>Aucun commentaire pour cet article.</p>
                                                 @endif
-                                                <!-- Formulaire pour un nouveau commentaire -->
-                                                <form action="{{ route('comment.store') }}" method="POST" class="mt-4">
-                                                    @csrf
-                                                    <div class="mb-2">
-                                                        <label for="nom" class="block  font-semibold">Nom :</label>
-                                                        <input type="text" id="nom" name="nom"
-                                                            class="border-gray-300 border w-full py-2 px-3 rounded mt-1">
-                                                    </div>
-                                                    <div class="mb-2">
-                                                        <label for="contenu" class="block  font-semibold">Contenu :</label>
-                                                        <textarea id="contenu" name="contenu" class="border-gray-300 border w-full py-2 px-3 rounded mt-1"></textarea>
-                                                    </div>
-                                                    <input type="hidden" name="article_id" value="{{ $articles[0]->id }}">
-                                                    <button type="submit"
-                                                        class="bg-blue-500 text-white px-4 py-2 rounded">Ajouter un
-                                                        commentaire</button>
-                                                </form>
+
+
                                             </div>
+
+                                             <!-- Formulaire pour un nouveau commentaire -->
+
+                                            <div class="mb-2">
+                                                <label for="nom" class="block  font-semibold">Nom :</label>
+                                                <input type="text" id="nom" name="nom"
+                                                    class="newCommentName border-gray-300 border w-full py-2 px-3 rounded mt-1">
+                                            </div>
+                                            <div class="mb-2">
+                                                <label for="contenu" class="block  font-semibold">Contenu :</label>
+                                                <textarea id="contenu" name="contenu" class="newCommentContent border-gray-300 border w-full py-2 px-3 rounded mt-1"></textarea>
+                                            </div>
+                                            <input type="hidden" name="article_id" value="{{ $articles[0]->id }}">
+                                            <button type="submit" onclick ="addNewComment()"
+                                                class="bg-blue-500 text-white px-4 py-2 rounded">Ajouter un
+                                                commentaire</button>
 
                                         </div>
 
@@ -149,7 +155,9 @@
                                         <div class="p-4 border rounded-lg shadow-md article-item "
                                             data-article-id="{{ $article->id }}">
                                             <h2 class="text-lg font-semibold mb-2">{{ $article->title }}</h2>
-                                            <p class="text-gray-700">{{ $article->content }}</p>
+                                            <p class="text-gray-700">Publié le :{{ $article->published_at }}</p>
+
+
                                         </div>
                                     @endforeach
                                 </div>
@@ -163,15 +171,18 @@
                 document.addEventListener('DOMContentLoaded', function() {
                     const toggleCommentsBtn = document.getElementById('toggle-comments-btn');
                     const commentList = document.getElementById('comment-list');
+                    const comment = document.getElementById('toggleComments');
 
                     toggleCommentsBtn.addEventListener('click', function() {
                         if (commentList.style.display === 'none') {
                             // Afficher les commentaires
                             commentList.style.display = 'block';
+                            comment.style.display = 'block';
                             toggleCommentsBtn.textContent = 'Réduire les commentaires';
                         } else {
                             // Masquer les commentaires
                             commentList.style.display = 'none';
+                            comment.style.display = 'none';
                             toggleCommentsBtn.textContent = 'Voir les commentaires';
                         }
                     });
@@ -189,6 +200,7 @@
                             // Récupérez les détails de l'article à l'aide de l'ID
                             const articleDetails = await getArticleDetails(articleId);
                             console.log(articleDetails);
+                            $comments = (articleDetails.comments);
 
                             // Mettez à jour l'affichage des détails de l'article
                             displayArticleDetails(articleDetails, articleId);
@@ -224,10 +236,14 @@
                     const articleTitleElement = document.querySelector('#article-title');
                     const articleImageElement = document.querySelector('#article-image');
                     const articleContentElement = document.querySelector('#article-content');
-                    const commentListElement = document.querySelector('#comment-list');
+                    const commentListElement = document.getElementById('comment-list');
+
                     const id_article = document.querySelector('input[name="article_id"]');
 
                     id_article.value = articleId;
+
+                    commentListElement.innerHTML =
+                        '<input type = "hidden" name = "article_id">'; // Effacez les commentaires précédents
 
 
                     // Mettez à jour les éléments HTML avec les détails de l'article
@@ -235,8 +251,6 @@
                     articleContentElement.textContent = articleDetails.content;
                     articleImageElement.innerHTML = `<img src="${articleDetails.image_path}" alt="Image de l'article">`;
 
-                    // Effacez d'abord la liste des commentaires existante
-                    commentListElement.innerHTML = '';
 
                     // Parcourez chaque commentaire et créez des éléments HTML pour les ajouter à la liste
                     articleDetails.comments.forEach(comment => {
@@ -252,6 +266,50 @@
                         commentItem.appendChild(contenuElement);
                         commentListElement.appendChild(commentItem);
                     });
+
+
+
+                }
+
+                function addNewComment() {
+
+                    const id_article = document.querySelector('input[name="article_id"]');
+                    const commentListElement = document.getElementById('comment-list');
+                    const nameTag = document.querySelector('.newCommentName')
+                    const contenuTag = document.querySelector('.newCommentContent')
+
+                    const name = nameTag.value;
+                    const contenu = contenuTag.value;
+
+                    const commentItem = document.createElement('li');
+                    const nomElement = document.createElement('p');
+                    nomElement.textContent = 'Nom: ' + name;
+                    nomElement.classList.add('font-semibold');
+                    const contenuElement = document.createElement('p');
+                    contenuElement.textContent = contenu;
+
+                    // Ajoutez les éléments à l'élément de liste de commentaires
+                    commentItem.appendChild(nomElement);
+                    commentItem.appendChild(contenuElement);
+                    commentListElement.appendChild(commentItem);
+
+                    let token = "{{ csrf_token() }}";
+
+                    const form = new FormData();
+                    form.append("_token", token);
+                    form.append('nom', name);
+                    form.append('contenu', contenu);
+                    form.append('article_id',id_article.value );
+                    form.append('statut', 1);
+                    const options = {
+                        method: "post",
+                        body: form
+                    };
+
+                    fetch("{{ route('comment.store') }}", options).then(response => {});
+
+                    nameTag.value = '';
+                    contenuTag.value = '';
 
                 }
             </script>

@@ -19,7 +19,7 @@
                             <img src="{{ asset('storage/' . $post->image_path) }}" alt="{{ $post->title }}"
                                 class="w-full h-32 object-cover mb-2 rounded">
                             <h2 class="text-xl font-semibold mb-2">{{ $post->title }}</h2>
-                            <p class="text-gray-600">{{ $post->content }}</p>
+
                             <p>Publié le {{ $post->published_at }}</p>
                             <button class="text-blue-500 mt-4 inline-block"
                                 onclick="afficherPostComplet({{ $post->id }})">Voir plus</button>
