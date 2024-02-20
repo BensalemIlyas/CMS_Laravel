@@ -4,10 +4,24 @@
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Dashboard') }}
+            @if(!empty($has_site) && ($themePreferences))
+                   
+                <style>
+                    main{
+                            
+                            background-color: {{$themePreferences->background_color}} !important;
+                            color : {{$themePreferences->police}} !important;
+                            
+                    }
+                    
+                </style>
+
+            @endif
         </h2>
     </x-slot>
 
     @section('content')
+    @if(!empty($has_site))
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-gray overflow-hidden shadow-sm sm:rounded-lg">
@@ -19,17 +33,16 @@
                             @if($menuPreferences->menuId == 10)
                                 <nav class="flex flex-col items-start">
                                     <ul class="space-y-2">
-                                        @foreach($menuPreferences->titlesUriMap as $title => $url)
-                                            <li><a href="{{ $url }}" class="text-gray-800 hover:text-blue-500">{{ $title }}</a></li>
-                                        @endforeach
+                                        <li><a href="/dashboard" class="text-gray-800 hover:text-blue-500">Accueil</a></li>
+                                        <li><a href="/dashboard/articles" class="text-gray-800 hover:text-blue-500">Articles</a></li>
                                     </ul>
                                 </nav>
                             @elseif($menuPreferences->menuId == 11)
+                            
                                 <nav class="flex items-center justify-center">
                                     <ul class="flex space-x-4">
-                                        @foreach($menuPreferences->titlesUriMap as $title => $url)
-                                            <li><a href="{{ $url }}" class="text-gray-800 hover:text-blue-500">{{ $title }}</a></li>
-                                        @endforeach
+                                        <li><a href="/dashboard" class="text-gray-800 hover:text-blue-500">Accueil</a></li>
+                                        <li><a href="/dashboard/articles" class="text-gray-800 hover:text-blue-500">Articles</a></li>
                                     </ul>
                                 </nav>
                             @elseif($menuPreferences->menuId == 13)
@@ -38,9 +51,8 @@
                                     <label for="checked" class="menu-icon">&#9776;</label>
                                     <input type="checkbox" id="checked">
                                     <ul class="menu">
-                                        @foreach($menuPreferences->titlesUriMap as $title => $url)
-                                             <li><a href="{{ $url }}" class="text-gray-800 hover:text-blue-500">{{ $title }}</a></li>
-                                        @endforeach
+                                        <li><a href="/dashboard" class="text-gray-800 hover:text-blue-500">Accueil</a></li>
+                                        <li><a href="/dashboard/articles" class="text-gray-800 hover:text-blue-500">Articles</a></li>
                                     </ul>
                                 </div>
 
@@ -61,76 +73,10 @@
                         @endif
                     </div>
                     <!-- Partie du body du site  -->
-                    <div class="container mx-auto mt-8 flex">
+                        <div class="container mx-auto mt-8 flex">
                         <br>
-
-                        <!-- Partie droite du body  -->
-                        <div class="w-2/3 pl-4 border-l border-gray-300" id="article-details">
-                            <!-- Affichage du premier article par défaut -->
-                            @if($articles->isNotEmpty())
-                            <div class="p-4 border rounded-lg shadow-md">
-                                <div class="flex justify-center" id="article-image">
-                                     <img  src="{{ asset('storage/' . $articles[0]->image_path) }}" alt="Image de l'article" >
-                                </div>
-                                <h2 class="text-lg font-semibold mb-2 " id="article-title">{{ $articles[0]->title }}</h2>
-                                <p class="text-gray-700" id="article-content">{{ $articles[0]->content }}</p>
-
-                                <!-- Liste des commentaires -->
-                                <div class="mt-4" >
-                                    <h3 class="text-xl font-semibold mb-2 flex justify-center">Commentaires</h3>
-                                    
-                                    @if($comments->isNotEmpty())
-                                    <ul class="space-y-2" id="comment-list">
-                                        @foreach($comments as $comment)
-                                        <li>
-                                            <p class="font-semibold" >Nom: {{ $comment->nom }}</p>
-                                            <p > {{ $comment->contenu }}</p>
-                                        </li>
-                                        @endforeach
-                                    </ul>
-                                    @else
-                                    <p>Aucun commentaire pour cet article.</p>
-                                    @endif
-                                     <!-- Formulaire pour un nouveau commentaire -->
-                                    <form action="{{ route('comment.store') }}" method="POST" class="mt-4">
-                                        @csrf
-                                        <div class="mb-2">
-                                            <label for="nom" class="block text-gray-600 font-semibold">Nom :</label>
-                                            <input type="text" id="nom" name="nom" class="border-gray-300 border w-full py-2 px-3 rounded mt-1">
-                                        </div>
-                                        <div class="mb-2">
-                                            <label for="contenu" class="block text-gray-600 font-semibold">Contenu :</label>
-                                            <textarea id="contenu" name="contenu" class="border-gray-300 border w-full py-2 px-3 rounded mt-1"></textarea>
-                                        </div>
-                                        <input type="hidden" name="article_id" value="{{ $articles[0]->id }}">
-                                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Ajouter un commentaire</button>
-                                    </form>
-                                </div>
-
-                               
-
-                            </div>
-                            @else
-                            <p>Aucun article disponible</p>
-                            @endif
-                        </div>
-
-
-                        <!-- Partie gauche du body  -->
-                        <div class="w-1/3 pr-4 overflow-y-auto max-h-screen ml-5">
-                            <h1 class="text-2xl font-semibold mb-4">Liste des articles</h1>
-                            <div class="space-y-4">
-                                <!-- Boucle sur tous les articles -->
-                                @foreach($articles as $article)
-                                <div class="p-4 border rounded-lg shadow-md article-item" data-article-id="{{$article->id}}">
-                                    <h2 class="text-lg font-semibold mb-2">{{ $article->title }}</h2>
-                                    <p class="text-gray-700">{{ $article->content }}</p>
-                                </div>
-                                @endforeach
-                            </div>
-                        </div>
+                  
                     </div>
-
                 </div>
             </div>
         </div>
@@ -150,7 +96,7 @@
                     console.log(articleDetails);
 
                     // Mettez à jour l'affichage des détails de l'article
-                    displayArticleDetails(articleDetails);
+                    displayArticleDetails(articleDetails,articleId);
                 } catch (error) {
                     // Gérer les erreurs
                     console.error('Erreur lors de la récupération des détails de l\'article:', error);
@@ -177,12 +123,16 @@
 
 
         // Fonction pour afficher les détails de l'article dans l'interface utilisateur
-        function displayArticleDetails(articleDetails) {
+        function displayArticleDetails(articleDetails,articleId) {
+            
 
             const articleTitleElement = document.querySelector('#article-title');
             const articleImageElement = document.querySelector('#article-image');
             const articleContentElement = document.querySelector('#article-content');
             const commentListElement = document.querySelector('#comment-list');
+            const id_article = document.querySelector('input[name="article_id"]');
+
+            id_article.value = articleId;
             
 
             // Mettez à jour les éléments HTML avec les détails de l'article
@@ -211,6 +161,16 @@
         }
 
     </script>
+    @else
+        <div class="flex justify-center items-center h-screen">
+            <div class="bg-gray-100 p-8 rounded-md shadow-md">
+                <p class="text-center">
+                    Vous n'avez pas de site web. Veuillez en créer un pour accéder à cette page.
+                </p>
+            </div>
+        </div>
+
+    @endif
     @endsection
 
 </x-app-layout>

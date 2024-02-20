@@ -12,7 +12,7 @@ class PostsController extends Controller
 
     public function post()
     {
-        $posts = Post::all();
+        $posts = Post::where('user_id', auth()->user()->id)->get();
         return view('post', compact('posts'));
     }
 
@@ -74,8 +74,12 @@ class PostsController extends Controller
         // Ajout de la date de publication aux données validées
         $validatedData['published_at'] = $request->input('published_at');
 
+        $validatedData['user_id'] = auth()->user()->id;
+
         // Création du post
+        $user = auth()->user();
         $post = Post::create($validatedData);
+        $user->update(['site' => true]);
 
 
 

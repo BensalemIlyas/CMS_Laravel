@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
+            $table->boolean('site')->default(false); // true si l'utilisateur a un site, false sinon
             $table->timestamps();
         });
     }

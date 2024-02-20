@@ -73,15 +73,16 @@ class MenuController extends Controller
 
         // Récupérez l'utilisateur authentifié
         $user = auth()->user();
-
-        
-
+       
         // Créez ou mettez à jour le site associé à l'utilisateur
         $site = $user->site()->updateOrCreate([], [
             'menu_preferences' => json_encode($json)
             
             // Ajoutez d'autres champs au besoin
         ]);
+
+         $user->update(['site' => true]);
+       
 
         return response()->json(['success' => 'Choix de menu sauvegardé avec succès.']);
 
@@ -135,6 +136,7 @@ class MenuController extends Controller
 
         // Retourner le chemin de l'image sauvegardée
         $menus = Menu::all();
+        $user->update(['site' => true]);
         $sites = Site::where('user_id', auth()->user()->id)->first(); 
         return view('menu',compact('menus', 'sites'))->with('success', 'Image de menu sauvegardée avec succès.');
     }

@@ -22,7 +22,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', [DashboardController::class, 'site'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'accueil'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard/articles', [DashboardController::class, 'site'])->middleware(['auth', 'verified']);
 
 
 Route::get('/posts', [PostsController::class, 'post'])->name('posts');

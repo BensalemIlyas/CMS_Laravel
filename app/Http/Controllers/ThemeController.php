@@ -25,8 +25,8 @@ class ThemeController extends Controller
             return response()->json([
                 'name' => $theme->name,
                 'police' => $theme->police,
-                'background-color' => $theme->background_color,
-                'couleur-sep' => $theme->separation_color
+                'background_color' => $theme->background_color,
+                'couleur_sep' => $theme->separation_color
 
                 // Ajoutez d'autres champs au besoin
             ]);
@@ -42,8 +42,8 @@ class ThemeController extends Controller
     public function save( Request $request){
         $json = [
             "police" => $request->police,
-            "background-color" => $request->background_color,
-            "couleur-sep" => $request->separation_color
+            "background_color" => $request->background_color,
+            "couleur_sep" => $request->separation_color
         ];
 
         $user = auth()->user();
@@ -54,6 +54,7 @@ class ThemeController extends Controller
 
             // Ajoutez d'autres champs au besoin
         ]);
+        $user->update(['site' => true]);
         
          return view('theme');
 

@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'site',
     ];
 
     /**
@@ -46,5 +47,9 @@ class User extends Authenticatable
     public function site()
     {
         return $this->hasOne(Site::class);
+    }
+    public function articles()
+    {
+        return $this->hasMany(Post::class, 'user_id');
     }
 }

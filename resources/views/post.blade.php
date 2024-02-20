@@ -15,7 +15,7 @@
                 <!-- Boucle sur les posts (peut être dynamique selon le backend) -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     @foreach ($posts as $post)
-                        <div class="bg-white p-6 rounded-lg shadow-md" id="post-{{ $post->id  }}">
+                        <div class="bg-white p-6 rounded-lg shadow-md" id="post-{{ $post->id }}">
                             <img src="{{ asset('storage/' . $post->image_path) }}" alt="{{ $post->title }}"
                                 class="w-full h-32 object-cover mb-2 rounded">
                             <h2 class="text-xl font-semibold mb-2">{{ $post->title }}</h2>
@@ -83,7 +83,7 @@
             // Basculer entre l'affichage de la liste des posts et du formulaire d'ajout
             document.getElementById('listeDesPosts').classList.toggle('hidden');
             document.getElementById('formulaireAjoutPost').classList.toggle('hidden');
-            
+
         });
 
         document.getElementById('annulerajout').addEventListener('click', function() {
@@ -93,7 +93,7 @@
 
         });
 
-        let token = "{{csrf_token()}}";
+        let token = "{{ csrf_token() }}";
 
         function afficherPostComplet(postId) {
             fetch(`/posts/${postId}`)
@@ -134,34 +134,37 @@
                     }
 
                     // Afficher les détails du post dans la partie droite
-                    const postComplet =  document.getElementById('postComplet');
+                    const postComplet = document.getElementById('postComplet');
                     postComplet.innerHTML = postDetailsHTML;
                     postComplet.querySelector('.deletePost').addEventListener('click', event => {
                         const form = new FormData();
 
-                        form.append("postId",postId);
-                        form.append("_token",token);
+                        form.append("postId", postId);
+                        form.append("_token", token);
 
                         const options = {
                             method: "post",
                             body: form
                         };
 
-                        fetch("{{route("post.delete")}}",options).then(response => response.json()).then(dataJson => {
-                            if(dataJson.success){
-                                token = dataJson.token;
-                                postComplet.innerHTML = "";
-                                const postContainer = document.querySelector(`#post-${postId}`);
+                        fetch("{{ route('post.delete') }}", options).then(response => response.json()).then(
+                            dataJson => {
+                                if (dataJson.success) {
+                                    token = dataJson.token;
+                                    postComplet.innerHTML = "";
+                                    const postContainer = document.querySelector(`#post-${postId}`);
 
-                                postContainer.animate({opacity: 0},400).addEventListener("finish",() => {
-                                    postContainer.remove();
-                                });
+                                    postContainer.animate({
+                                        opacity: 0
+                                    }, 400).addEventListener("finish", () => {
+                                        postContainer.remove();
+                                    });
 
-                            }else{
-                                alert(dataJson.error);
-                            }
+                                } else {
+                                    alert(dataJson.error);
+                                }
 
-                        }).catch(error => {
+                            }).catch(error => {
                             console.log(error)
                             alert("Une erreur s'est produit")
                         });
@@ -181,32 +184,31 @@
             let buttonChangerStatut = document.getElementById('buttonChangerStatut');
 
             fetch(`/comments/${commentId}`, {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}', // Ajoutez le jeton CSRF
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Erreur de réponse du serveur.');
-                }
-                return response.json();
-            })
-            .then(data => {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}', // Ajoutez le jeton CSRF
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erreur de réponse du serveur.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
 
-                let commentStatut = data.statut ? 'Visible' : 'Non visible';
-                comment.textContent =  'Statut: ' + commentStatut ;
-                // Afficher un message de succès ou mettre à jour l'affichage des commentaires si nécessaire
-                console.log('Statut du commentaire changé avec succès:', data);
-                // buttonChangerStatut.disabled = true;
-                // setTimeout(()=>buttonChangerStatut.disabled = false, 800);
+                    let commentStatut = data.statut ? 'Visible' : 'Non visible';
+                    comment.textContent = 'Statut: ' + commentStatut;
+                    // Afficher un message de succès ou mettre à jour l'affichage des commentaires si nécessaire
+                    console.log('Statut du commentaire changé avec succès:', data);
+                    // buttonChangerStatut.disabled = true;
+                    // setTimeout(()=>buttonChangerStatut.disabled = false, 800);
 
-            })
-            .catch(error => {
-                console.error('Erreur lors du changement de statut du commentaire :', error.message);
-            });
-    }
-
+                })
+                .catch(error => {
+                    console.error('Erreur lors du changement de statut du commentaire :', error.message);
+                });
+        }
     </script>
 @endsection

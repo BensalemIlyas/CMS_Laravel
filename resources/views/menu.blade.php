@@ -60,25 +60,7 @@
             
         </div>
 
-        <!-- formulaire d'ajout de menu -->
-        <div>
-            <form id="menuForm" action="/menu" method="POST" enctype="multipart/form-data">
-                @csrf
-                </br>
-                <div class="mb-4">
-                    <label for="nom" class="block text-gray-600 font-semibold">Nom du menu :</label>
-                    <input type="text" id ="nom" name="nom">
-                    <label for="image" class="block text-gray-600 font-semibold">Image de top menu :</label>
-                    <input type="file" id="image" name="image" accept="image/*"
-                        class="w-full border-b-2 border-gray-300 p-2 focus:outline-none focus:border-green-500"
-                        required>
-                </div>
-                </br>
-                <div class="mt-4">
-                    <button type="submit" id="enregistrement" class="bg-blue-500 text-white px-4 py-2 rounded">Enregistrer tt</button>
-                </div>
-            </form>
-        </div>
+        
 
 
         
